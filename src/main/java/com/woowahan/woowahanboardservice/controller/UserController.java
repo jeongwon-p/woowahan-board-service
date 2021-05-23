@@ -1,13 +1,14 @@
-package com.woowahan.woowahanuserservice.controller;
+package com.woowahan.woowahanboardservice.controller;
 
-import com.woowahan.woowahanuserservice.UserService;
-import com.woowahan.woowahanuserservice.dto.request.UserJoinRequestBody;
-import com.woowahan.woowahanuserservice.dto.request.LogInRequestBody;
-import com.woowahan.woowahanuserservice.dto.view.LogInResponse;
+import com.woowahan.woowahanboardservice.UserService;
+import com.woowahan.woowahanboardservice.domain.user.dto.request.LogInRequestBody;
+import com.woowahan.woowahanboardservice.domain.user.dto.request.UserJoinRequestBody;
+import com.woowahan.woowahanboardservice.domain.user.dto.view.LogInResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user/")
 public class UserController {
 
     private final UserService userService;

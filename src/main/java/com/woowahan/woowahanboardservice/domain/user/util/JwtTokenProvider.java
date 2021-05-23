@@ -1,4 +1,4 @@
-package com.woowahan.woowahanuserservice;
+package com.woowahan.woowahanboardservice.domain.user.util;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;

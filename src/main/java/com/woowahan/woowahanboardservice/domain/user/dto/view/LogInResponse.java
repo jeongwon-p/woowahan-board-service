@@ -1,4 +1,4 @@
-package com.woowahan.woowahanuserservice.dto.view;
+package com.woowahan.woowahanboardservice.domain.user.dto.view;
 
 public class LogInResponse {
 

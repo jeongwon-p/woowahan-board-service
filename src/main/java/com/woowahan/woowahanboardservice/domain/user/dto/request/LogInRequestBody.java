@@ -1,4 +1,4 @@
-package com.woowahan.woowahanuserservice.dto.request;
+package com.woowahan.woowahanboardservice.domain.user.dto.request;
 
 public class LogInRequestBody {
 

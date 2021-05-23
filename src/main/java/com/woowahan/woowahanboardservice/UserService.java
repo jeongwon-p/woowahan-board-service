@@ -1,12 +1,14 @@
-package com.woowahan.woowahanuserservice;
+package com.woowahan.woowahanboardservice;
 
-import com.woowahan.woowahanuserservice.dao.UserRepository;
-import com.woowahan.woowahanuserservice.dto.request.UserJoinRequestBody;
-import com.woowahan.woowahanuserservice.dto.request.LogInRequestBody;
-import com.woowahan.woowahanuserservice.dto.view.LogInResponse;
-import com.woowahan.woowahanuserservice.entity.User;
+import com.woowahan.woowahanboardservice.domain.user.dao.UserRepository;
+import com.woowahan.woowahanboardservice.domain.user.dto.request.LogInRequestBody;
+import com.woowahan.woowahanboardservice.domain.user.dto.request.UserJoinRequestBody;
+import com.woowahan.woowahanboardservice.domain.user.dto.view.LogInResponse;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
+import com.woowahan.woowahanboardservice.domain.user.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
 
 @Service
 public class UserService {

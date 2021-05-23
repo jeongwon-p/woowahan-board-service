@@ -1,4 +1,4 @@
-package com.woowahan.woowahanuserservice.entity;
+package com.woowahan.woowahanboardservice.domain.user.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

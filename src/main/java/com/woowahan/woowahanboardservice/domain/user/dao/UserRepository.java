@@ -1,6 +1,6 @@
-package com.woowahan.woowahanuserservice.dao;
+package com.woowahan.woowahanboardservice.domain.user.dao;
 
-import com.woowahan.woowahanuserservice.entity.User;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

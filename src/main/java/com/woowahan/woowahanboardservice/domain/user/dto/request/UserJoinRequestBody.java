@@ -1,6 +1,6 @@
-package com.woowahan.woowahanuserservice.dto.request;
+package com.woowahan.woowahanboardservice.domain.user.dto.request;
 
-import com.woowahan.woowahanuserservice.entity.User;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
 
 public class UserJoinRequestBody {
 

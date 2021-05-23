@@ -1,4 +1,4 @@
-package com.woowahan.woowahanuserservice;
+package com.woowahan.woowahanboardservice.domain.user.util;
 
 public class TokenResponse {
     private String accessToken;
