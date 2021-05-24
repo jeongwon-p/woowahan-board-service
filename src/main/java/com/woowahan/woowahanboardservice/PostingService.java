@@ -8,6 +8,8 @@ import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
+import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
+import com.woowahan.woowahanboardservice.domain.hackernews.helper.HackerNewsHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BoardService {
+public class PostingService {
 
     private final ArticleRepository articleDao;
     private final BoardRepository boardDao;
     private final CommentRepository commentDao;
 
-    public BoardService(
+    public PostingService(
             ArticleRepository articleDao,
             BoardRepository boardDao,
             CommentRepository commentDao
@@ -83,6 +85,13 @@ public class BoardService {
     public List<BoardView> searchBoards() {
         return boardDao.findAll().stream()
                 .map(BoardView::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<HackerNewsStoryView> searchLately10HackerNews() {
+        return HackerNewsHelper.getLatelyNewStoryIdsByLimit(10).stream()
+                .map(HackerNewsHelper::getStory)
+                .map(HackerNewsStoryView::new)
                 .collect(Collectors.toList());
     }
 }

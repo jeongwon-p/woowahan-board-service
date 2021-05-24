@@ -1,9 +1,10 @@
 package com.woowahan.woowahanboardservice.controller;
 
-import com.woowahan.woowahanboardservice.BoardService;
+import com.woowahan.woowahanboardservice.PostingService;
 import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
+import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,63 +12,67 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/board/")
-public class BoardController {
+@RequestMapping("/post/")
+public class PostingController {
 
-    private final BoardService boardService;
+    private final PostingService postingService;
 
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
+    public PostingController(PostingService postingService) {
+        this.postingService = postingService;
     }
 
     @ApiOperation("게시판 등록 및 수정")
     @PostMapping("/board")
     public void saveBoard(BoardEditRequestBody request) {
-        boardService.saveBoard(request);
+        postingService.saveBoard(request);
     }
 
     @ApiOperation("게시판 목록 불러오기")
     @GetMapping("/board/list")
     public ResponseEntity<List<BoardView>> searchBoards() {
-        return ResponseEntity.ok(boardService.searchBoards());
+        return ResponseEntity.ok(postingService.searchBoards());
     }
 
-    // TODO : 해커뉴스 최신 10개 불러오기
+    @ApiOperation("해커뉴스 최신 10개 불러오기")
+    @GetMapping("/hackernews/lately")
+    public ResponseEntity<List<HackerNewsStoryView>> searchLately10HackerNews() {
+        return ResponseEntity.ok(postingService.searchLately10HackerNews());
+    }
 
     @ApiOperation("게시글 목록 조회")
     @GetMapping("/article/list")
     public ResponseEntity<List<ArticleView>> searchArticles(@RequestParam String boardId) {
-        return ResponseEntity.ok(boardService.searchArticles(boardId));
+        return ResponseEntity.ok(postingService.searchArticles(boardId));
     }
 
     @ApiOperation("게시글 등록 및 수정")
     @PostMapping("/article")
     public void saveArticle(ArticleEditRequestBody request) {
-        boardService.saveArticle(request);
+        postingService.saveArticle(request);
     }
 
     @ApiOperation("댓글 등록 및 수정")
     @PostMapping("/comment")
     public void saveComment(CommentEditRequestBody request) {
-        boardService.saveComment(request);
+        postingService.saveComment(request);
     }
 
     @ApiOperation("게시글 조회")
     @GetMapping("/article")
     public ResponseEntity<ArticleView> searchArticle(@RequestParam String articleId) {
-        return ResponseEntity.ok(boardService.searchArticle(articleId));
+        return ResponseEntity.ok(postingService.searchArticle(articleId));
     }
 
     @ApiOperation("게시글 숨기기 및 숨기기 취소")
     @PostMapping("/article/hide")
     public void hideOrCancelArticle(ArticleHideRequestBody request) {
-        boardService.hideOrCancelArticle(request);
+        postingService.hideOrCancelArticle(request);
     }
 
     @ApiOperation("댓글 숨기기 및 숨기기 취소")
     @PostMapping("/comment/hide")
     public void hideOrCancelComment(CommentHideRequestBody request) {
-        boardService.hideOrCancelComment(request);
+        postingService.hideOrCancelComment(request);
     }
 
     // TODO : 일별 게시글, 댓글 통계(여유)
