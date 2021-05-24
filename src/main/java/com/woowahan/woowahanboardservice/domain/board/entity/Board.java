@@ -1,5 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.entity;
 
+import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +13,7 @@ import java.util.Objects;
 public class Board {
 
     @Id
-    @Column(name = "board_id")
+    @Column(name = "board_id", length = 36)
     private String id;
 
     // relation
@@ -19,13 +21,14 @@ public class Board {
     private List<Article> articles;
 
     // field
-    @Column(name = "board_desc")
+    @Column(name = "board_desc", length = 2000)
     private String description;
 
-    @Column(name = "hide_yn")
+    @Column(name = "hide_yn", columnDefinition = "varchar(1) default 'N'")
+    @Convert(converter = BooleanToYnConverter.class)
     private boolean hidden;
 
-    @Column(name = "board_name")
+    @Column(name = "board_name", length = 200)
     private String name;
 
     public Board() {

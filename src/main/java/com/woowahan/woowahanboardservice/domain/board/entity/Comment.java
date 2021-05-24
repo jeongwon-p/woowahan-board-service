@@ -1,5 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.entity;
 
+import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,31 +13,32 @@ import java.util.Objects;
 public class Comment {
 
     @Id
-    @Column(name = "comment_id")
+    @Column(name = "comment_id", length = 36)
     private String id;
 
     //relation
     @ManyToOne
-    @JoinColumn(name = "article_id")
+    @JoinColumn(foreignKey = @ForeignKey(name = "none"), name = "article_id", nullable = false, insertable = false, updatable = false)
     private Article article;
 
     //field
-    @Column(name = "article_id")
+    @Column(name = "article_id", length = 36)
     private String articleId;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 2000)
     private String content;
 
-    @Column(name = "crt_tm")
+    @Column(name = "crt_tm", length = 45)
     private LocalDateTime createDateTime;
 
-    @Column(name = "hide_yn")
+    @Column(name = "hide_yn", columnDefinition = "varchar(1) default 'N'")
+    @Convert(converter = BooleanToYnConverter.class)
     private boolean hidden;
 
-    @Column(name = "chg_tm")
+    @Column(name = "chg_tm", length = 45)
     private LocalDateTime modifyDateTime;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", length = 200)
     private String userId;
 
     public Comment() {
@@ -71,6 +74,18 @@ public class Comment {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Comment hideOrCancel() {
+        return new Comment(
+                this.id,
+                this.articleId,
+                this.content,
+                this.createDateTime,
+                !this.hidden,
+                LocalDateTime.now(),
+                this.userId
+        );
     }
 
     public String getId() {

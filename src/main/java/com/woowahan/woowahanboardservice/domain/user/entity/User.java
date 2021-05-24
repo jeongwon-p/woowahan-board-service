@@ -1,5 +1,6 @@
 package com.woowahan.woowahanboardservice.domain.user.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,13 +13,17 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @Column(name = "email_id")
     private String emailId;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "password")
     private String password;
 
-    private long rank;
+    @Column(name = "rank")
+    private int rank;
 
     public User() {
     }
@@ -27,7 +32,7 @@ public class User {
             String emailId,
             String name,
             String password,
-            long rank
+            int rank
     ) {
         this.emailId = emailId;
         this.name = name;
@@ -60,7 +65,7 @@ public class User {
         return password;
     }
 
-    public long getRank() {
+    public int getRank() {
         return rank;
     }
 }

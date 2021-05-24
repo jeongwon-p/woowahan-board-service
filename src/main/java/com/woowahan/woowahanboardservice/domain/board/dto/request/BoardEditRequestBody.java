@@ -17,7 +17,9 @@ public class BoardEditRequestBody {
 
     public Board toBoard() {
         return new Board(
-                boardId.isEmpty() ? UUID.randomUUID().toString() : boardId,
+                StringUtils.hasText(boardId)
+                        ? boardId
+                        : UUID.randomUUID().toString(),
                 description,
                 hidden,
                 name
@@ -38,6 +40,14 @@ public class BoardEditRequestBody {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public String getName() {

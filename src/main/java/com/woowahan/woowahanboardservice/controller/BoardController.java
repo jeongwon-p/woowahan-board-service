@@ -1,9 +1,10 @@
 package com.woowahan.woowahanboardservice.controller;
 
 import com.woowahan.woowahanboardservice.BoardService;
-import com.woowahan.woowahanboardservice.domain.board.dto.request.BoardEditRequestBody;
+import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,13 @@ public class BoardController {
         this.boardService = boardService;
     }
 
+    @ApiOperation("게시판 등록 및 수정")
     @PostMapping("/board")
-    public void saveBoard(BoardEditRequestBody request){
+    public void saveBoard(BoardEditRequestBody request) {
         boardService.saveBoard(request);
     }
 
-    // 게시판 목록 불러오기
+    @ApiOperation("게시판 목록 불러오기")
     @GetMapping("/board/list")
     public ResponseEntity<List<BoardView>> searchBoards() {
         return ResponseEntity.ok(boardService.searchBoards());
@@ -32,25 +34,41 @@ public class BoardController {
 
     // TODO : 해커뉴스 최신 10개 불러오기
 
-    // 게시글 목록 조회
+    @ApiOperation("게시글 목록 조회")
     @GetMapping("/article/list")
     public ResponseEntity<List<ArticleView>> searchArticles(@RequestParam String boardId) {
         return ResponseEntity.ok(boardService.searchArticles(boardId));
     }
 
-    // TODO : 게시글쓰기/수정
+    @ApiOperation("게시글 등록 및 수정")
+    @PostMapping("/article")
+    public void saveArticle(ArticleEditRequestBody request) {
+        boardService.saveArticle(request);
+    }
 
-    // TODO : 댓글 쓰기/수정
+    @ApiOperation("댓글 등록 및 수정")
+    @PostMapping("/comment")
+    public void saveComment(CommentEditRequestBody request) {
+        boardService.saveComment(request);
+    }
 
-    // 게시글조회
+    @ApiOperation("게시글 조회")
     @GetMapping("/article")
     public ResponseEntity<ArticleView> searchArticle(@RequestParam String articleId) {
         return ResponseEntity.ok(boardService.searchArticle(articleId));
     }
 
-    // TODO : 게시글숨기기/취소
+    @ApiOperation("게시글 숨기기 및 숨기기 취소")
+    @PostMapping("/article/hide")
+    public void hideOrCancelArticle(ArticleHideRequestBody request) {
+        boardService.hideOrCancelArticle(request);
+    }
 
-    // TODO : 댓글 숨기기/취소
+    @ApiOperation("댓글 숨기기 및 숨기기 취소")
+    @PostMapping("/comment/hide")
+    public void hideOrCancelComment(CommentHideRequestBody request) {
+        boardService.hideOrCancelComment(request);
+    }
 
     // TODO : 일별 게시글, 댓글 통계(여유)
 }
