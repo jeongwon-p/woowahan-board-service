@@ -116,14 +116,16 @@ public class PostingService {
     @Transactional
     public void saveComment(CommentEditRequestBody request) {
         // Todo : 권한 체크
+        Article article = articleDao.findById(request.getArticleId())
+                .orElseThrow(EntityNotFoundException::new);
         Comment comment = request.toComment();
 
         // send mail when a comment is first posted
         if (!StringUtils.hasText(request.getCommentId())) {
             mailService.sendMail(MailParam.builder()
-                    .address(comment.getArticle().getUserId())
+                    .address(article.getUserId())
                     .title("댓글 알림")
-                    .message("'" + comment.getArticle().getTitle() + "' 게시글에 댓글이 작성되었습니다.")
+                    .message("'" + article.getTitle() + "' 게시글에 댓글이 작성되었습니다.")
                     .build());
         }
         commentDao.save(comment);

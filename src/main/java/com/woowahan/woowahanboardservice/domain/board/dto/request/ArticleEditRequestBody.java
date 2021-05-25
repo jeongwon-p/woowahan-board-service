@@ -31,8 +31,8 @@ public class ArticleEditRequestBody {
                 boardId,
                 content,
                 StringUtils.hasText(articleId)
-                ? createDateTime
-                : LocalDateTime.now(),
+                        ? LocalDateTime.now()
+                        : createDateTime,
                 hidden,
                 LocalDateTime.now(),
                 title,

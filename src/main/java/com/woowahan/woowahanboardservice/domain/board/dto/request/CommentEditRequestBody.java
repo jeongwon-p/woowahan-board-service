@@ -30,9 +30,9 @@ public class CommentEditRequestBody {
                         : UUID.randomUUID().toString(),
                 articleId,
                 content,
-                StringUtils.hasText(articleId)
-                        ? createDateTime
-                        : LocalDateTime.now(),
+                StringUtils.hasText(commentId)
+                        ? LocalDateTime.now()
+                        : createDateTime,
                 hidden,
                 LocalDateTime.now(),
                 userId
