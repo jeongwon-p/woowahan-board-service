@@ -3,6 +3,7 @@ package com.woowahan.woowahanboardservice.domain.board.dto.request;
 import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 public class CommentEditRequestBody {
 
+    @ApiModelProperty(value = "첫 등록시 미입력, UUID 생성")
     private String commentId;
 
     private String articleId;
@@ -31,8 +33,8 @@ public class CommentEditRequestBody {
                 articleId,
                 content,
                 StringUtils.hasText(commentId)
-                        ? LocalDateTime.now()
-                        : createDateTime,
+                        ? createDateTime
+                        : LocalDateTime.now(),
                 hidden,
                 LocalDateTime.now(),
                 userId

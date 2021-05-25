@@ -1,12 +1,14 @@
 package com.woowahan.woowahanboardservice.domain.board.dto.request;
 
 import com.woowahan.woowahanboardservice.domain.board.entity.Board;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
 public class BoardEditRequestBody {
 
+    @ApiModelProperty(value = "첫 등록시 미입력, UUID 생성")
     private String boardId;
 
     private String description;

@@ -1,6 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.dto.request;
 
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 public class ArticleEditRequestBody {
 
+    @ApiModelProperty(value = "첫 등록시 미입력, UUID 생성")
     private String articleId;
 
     private String boardId;
@@ -31,8 +33,8 @@ public class ArticleEditRequestBody {
                 boardId,
                 content,
                 StringUtils.hasText(articleId)
-                        ? LocalDateTime.now()
-                        : createDateTime,
+                        ? createDateTime
+                        : LocalDateTime.now(),
                 hidden,
                 LocalDateTime.now(),
                 title,
