@@ -29,15 +29,18 @@ public class PostingService {
     private final ArticleRepository articleDao;
     private final BoardRepository boardDao;
     private final CommentRepository commentDao;
+    private final MailService mailService;
 
     public PostingService(
             ArticleRepository articleDao,
             BoardRepository boardDao,
-            CommentRepository commentDao
+            CommentRepository commentDao,
+            MailService mailService
     ) {
         this.articleDao = articleDao;
         this.boardDao = boardDao;
         this.commentDao = commentDao;
+        this.mailService = mailService;
     }
 
     @Transactional
@@ -46,6 +49,10 @@ public class PostingService {
         Article article = articleDao.findById(request.getArticleId())
                 .orElseThrow(EntityNotFoundException::new)
                 .hideOrCancel();
+        if (!article.isHidden()) {
+            this.checkExcess5Limit(article);
+        }
+
         articleDao.save(article);
     }
 
@@ -109,11 +116,17 @@ public class PostingService {
     @Transactional
     public void saveComment(CommentEditRequestBody request) {
         // Todo : 권한 체크
+        Comment comment = request.toComment();
+
         // send mail when a comment is first posted
         if (!StringUtils.hasText(request.getCommentId())) {
-            //sendMail();
+            mailService.sendMail(MailParam.builder()
+                    .address(comment.getArticle().getUserId())
+                    .title("댓글 알림")
+                    .message("'" + comment.getArticle().getTitle() + "' 게시글에 댓글이 작성되었습니다.")
+                    .build());
         }
-        commentDao.save(request.toComment());
+        commentDao.save(comment);
     }
 
     public ArticleView searchArticle(String articleId) {
