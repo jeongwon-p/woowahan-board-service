@@ -8,18 +8,24 @@ import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
+import com.woowahan.woowahanboardservice.domain.board.exception.ArticleIllegalException;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
 import com.woowahan.woowahanboardservice.domain.hackernews.helper.HackerNewsHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
 public class PostingService {
 
+    private final List<String> prohibitedWords = List.of("비속어", "나쁜놈", "배고파", "키보드", "마우스");
     private final ArticleRepository articleDao;
     private final BoardRepository boardDao;
     private final CommentRepository commentDao;
@@ -55,7 +61,43 @@ public class PostingService {
     @Transactional
     public void saveArticle(ArticleEditRequestBody request) {
         // Todo : 권한 체크
-        articleDao.save(request.toArticle());
+        Article article = request.toArticle();
+        this.checkExcess5Limit(article);
+        this.checkProhibitionWords(article.getContents());
+        this.checkIncludedLink(article.getContents());
+
+        articleDao.save(article);
+    }
+
+    private void checkExcess5Limit(Article article) {
+        LocalDateTime startDateTime = article.getCreateDateTime().toLocalDate().atStartOfDay();
+        LocalDateTime endDateTime = article.getCreateDateTime().toLocalDate().atStartOfDay().plusDays(1);
+
+        List<Article> articles = articleDao.findAllByUserIdAndCreateDateTimeBetween(article.getUserId(), startDateTime, endDateTime).stream()
+                .filter(target -> !target.getId().equals(article.getId()))
+                .filter(target -> !target.isHidden())
+                .collect(Collectors.toList());
+
+        if (articles.size() > 5) {
+            throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
+        }
+    }
+
+    private void checkProhibitionWords(String contents) {
+        String withoutSpecialCharacter = contents.replaceAll("[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]", "");
+
+        if (prohibitedWords.stream().anyMatch(withoutSpecialCharacter::contains)) {
+            throw new ArticleIllegalException("The content cannot contain prohibited words");
+        }
+    }
+
+    private void checkIncludedLink(String contents) {
+        Pattern pattern = Pattern.compile("^(https?://)([^/]*)(.)(naver.com|daum.com|)(/)");
+        Matcher matcher = pattern.matcher(contents);
+
+        if (matcher.find()) {
+            throw new ArticleIllegalException("The content cannot contain naver, daum link");
+        }
     }
 
     @Transactional
@@ -67,6 +109,10 @@ public class PostingService {
     @Transactional
     public void saveComment(CommentEditRequestBody request) {
         // Todo : 권한 체크
+        // send mail when a comment is first posted
+        if (!StringUtils.hasText(request.getCommentId())) {
+            //sendMail();
+        }
         commentDao.save(request.toComment());
     }
 

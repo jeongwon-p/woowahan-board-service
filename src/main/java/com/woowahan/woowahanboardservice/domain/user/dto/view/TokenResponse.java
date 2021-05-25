@@ -1,4 +1,4 @@
-package com.woowahan.woowahanboardservice.domain.user.util;
+package com.woowahan.woowahanboardservice.domain.user.dto.view;
 
 public class TokenResponse {
     private String accessToken;

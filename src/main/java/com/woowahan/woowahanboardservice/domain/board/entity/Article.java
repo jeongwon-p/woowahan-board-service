@@ -1,6 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.entity;
 
 import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,11 +20,15 @@ public class Article {
 
     // relation
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name="none"), name = "board_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "none"), name = "board_id", nullable = false, insertable = false, updatable = false)
     private Board board;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "none"), name = "user_id", nullable = false, insertable = false, updatable = false)
+    private User user;
 
     // field
     @Column(name = "board_id", length = 36)
@@ -85,7 +90,7 @@ public class Article {
     public int hashCode() {
         return Objects.hash(id);
     }
-    
+
     public Article hideOrCancel() {
         return new Article(
                 this.id,
@@ -98,7 +103,7 @@ public class Article {
                 this.userId
         );
     }
-    
+
     public String getId() {
         return id;
     }
@@ -109,6 +114,10 @@ public class Article {
 
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public String getBoardId() {
