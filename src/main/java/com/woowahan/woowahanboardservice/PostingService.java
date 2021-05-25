@@ -85,7 +85,7 @@ public class PostingService {
                 .filter(target -> !target.isHidden())
                 .collect(Collectors.toList());
 
-        if (articles.size() > 5) {
+        if (articles.size() > 4) {
             throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
         }
     }
@@ -99,7 +99,7 @@ public class PostingService {
     }
 
     private void checkIncludedLink(String contents) {
-        Pattern pattern = Pattern.compile("^(https?://)([^/]*)(.)(naver.com|daum.com|)(/)");
+        Pattern pattern = Pattern.compile("(https?://)([^/]*)(.)?(naver.com|daum.com|)(/)?");
         Matcher matcher = pattern.matcher(contents);
 
         if (matcher.find()) {
