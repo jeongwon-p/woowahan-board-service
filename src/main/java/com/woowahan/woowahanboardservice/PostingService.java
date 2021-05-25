@@ -7,6 +7,7 @@ import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
+import com.woowahan.woowahanboardservice.domain.board.entity.Board;
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
 import com.woowahan.woowahanboardservice.domain.board.exception.ArticleIllegalException;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
@@ -54,6 +55,15 @@ public class PostingService {
         }
 
         articleDao.save(article);
+    }
+
+    @Transactional
+    public void hideOrCancelBoard(BoardHideRequestBody request) {
+        // Todo : 권한 체크
+        Board board = boardDao.findById(request.getBoardId())
+                .orElseThrow(EntityNotFoundException::new)
+                .hideOrCancel();
+        boardDao.save(board);
     }
 
     @Transactional

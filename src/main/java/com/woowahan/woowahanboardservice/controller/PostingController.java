@@ -69,6 +69,12 @@ public class PostingController {
         postingService.hideOrCancelArticle(request);
     }
 
+    @ApiOperation("게시판 숨기기 및 숨기기 취소")
+    @PostMapping("/board/hide")
+    public void hideOrCancelBoard(BoardHideRequestBody request) {
+        postingService.hideOrCancelBoard(request);
+    }
+
     @ApiOperation("댓글 숨기기 및 숨기기 취소")
     @PostMapping("/comment/hide")
     public void hideOrCancelComment(CommentHideRequestBody request) {

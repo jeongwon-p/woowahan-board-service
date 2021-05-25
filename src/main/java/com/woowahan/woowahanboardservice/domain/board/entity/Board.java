@@ -60,6 +60,15 @@ public class Board {
         return Objects.hash(id);
     }
 
+    public Board hideOrCancel() {
+        return new Board(
+                this.id,
+                this.description,
+                !this.hidden,
+                this.name
+        );
+    }
+
     public String getId() {
         return id;
     }
