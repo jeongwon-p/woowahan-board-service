@@ -35,6 +35,20 @@ public class Board {
 
     }
 
+    private Board(
+            String id,
+            List<Article> articles,
+            String description,
+            boolean hidden,
+            String name
+    ) {
+        this.id = id;
+        this.articles = articles;
+        this.description = description;
+        this.hidden = hidden;
+        this.name = name;
+    }
+
     public Board(
             String id,
             String description,
@@ -63,6 +77,7 @@ public class Board {
     public Board hideOrCancel() {
         return new Board(
                 this.id,
+                this.articles,
                 this.description,
                 !this.hidden,
                 this.name

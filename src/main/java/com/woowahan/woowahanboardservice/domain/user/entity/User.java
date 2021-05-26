@@ -1,9 +1,8 @@
 package com.woowahan.woowahanboardservice.domain.user.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +15,10 @@ public class User {
     @Column(name = "email_id")
     private String emailId;
 
+    @Column(name = "hide_yn", columnDefinition = "varchar(1) default 'N'")
+    @Convert(converter = BooleanToYnConverter.class)
+    private boolean hidden;
+
     @Column(name = "name")
     private String name;
 
@@ -25,19 +28,26 @@ public class User {
     @Column(name = "rank")
     private int rank;
 
+    @Column(name = "score")
+    private int score;
+
     public User() {
     }
 
     public User(
             String emailId,
+            boolean hidden,
             String name,
             String password,
-            int rank
+            int rank,
+            int score
     ) {
         this.emailId = emailId;
+        this.hidden = hidden;
         this.name = name;
         this.password = password;
         this.rank = rank;
+        this.score = score;
     }
 
     @Override
@@ -51,6 +61,17 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(emailId);
+    }
+
+    public User hideOrCancel() {
+        return new User(
+                this.emailId,
+                !this.hidden,
+                this.name,
+                this.password,
+                this.rank,
+                this.score
+        );
     }
 
     public String getEmailId() {
@@ -67,5 +88,9 @@ public class User {
 
     public int getRank() {
         return rank;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

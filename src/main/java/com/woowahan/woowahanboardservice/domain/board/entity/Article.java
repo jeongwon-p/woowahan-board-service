@@ -58,6 +58,32 @@ public class Article {
 
     }
 
+    private Article(
+            String id,
+            Board board,
+            List<Comment> comments,
+            User user,
+            String boardId,
+            String contents,
+            LocalDateTime createDateTime,
+            boolean hidden,
+            LocalDateTime modifyDateTime,
+            String title,
+            String userId
+    ) {
+        this.id = id;
+        this.board = board;
+        this.comments = comments;
+        this.user = user;
+        this.boardId = boardId;
+        this.contents = contents;
+        this.createDateTime = createDateTime;
+        this.hidden = hidden;
+        this.modifyDateTime = modifyDateTime;
+        this.title = title;
+        this.userId = userId;
+    }
+
     public Article(
             String id,
             String boardId,
@@ -94,6 +120,9 @@ public class Article {
     public Article hideOrCancel() {
         return new Article(
                 this.id,
+                this.board,
+                this.comments,
+                this.user,
                 this.boardId,
                 this.contents,
                 this.createDateTime,

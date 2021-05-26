@@ -1,6 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.entity;
 
 import com.woowahan.woowahanboardservice.common.BooleanToYnConverter;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,10 @@ public class Comment {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "none"), name = "article_id", nullable = false, insertable = false, updatable = false)
     private Article article;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "none"), name = "user_id", nullable = false, insertable = false, updatable = false)
+    private User user;
 
     //field
     @Column(name = "article_id", length = 36)
@@ -43,6 +48,28 @@ public class Comment {
 
     public Comment() {
 
+    }
+
+    private Comment(
+            String id,
+            Article article,
+            User user,
+            String articleId,
+            String content,
+            LocalDateTime createDateTime,
+            boolean hidden,
+            LocalDateTime modifyDateTime,
+            String userId
+    ) {
+        this.id = id;
+        this.article = article;
+        this.user = user;
+        this.articleId = articleId;
+        this.content = content;
+        this.createDateTime = createDateTime;
+        this.hidden = hidden;
+        this.modifyDateTime = modifyDateTime;
+        this.userId = userId;
     }
 
     public Comment(
@@ -79,6 +106,8 @@ public class Comment {
     public Comment hideOrCancel() {
         return new Comment(
                 this.id,
+                this.article,
+                this.user,
                 this.articleId,
                 this.content,
                 this.createDateTime,
