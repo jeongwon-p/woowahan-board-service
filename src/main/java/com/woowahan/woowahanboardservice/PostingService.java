@@ -6,12 +6,15 @@ import com.woowahan.woowahanboardservice.domain.board.dao.CommentRepository;
 import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
+import com.woowahan.woowahanboardservice.domain.board.dto.view.CommentView;
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
 import com.woowahan.woowahanboardservice.domain.board.entity.Board;
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
 import com.woowahan.woowahanboardservice.domain.board.exception.ArticleIllegalException;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
 import com.woowahan.woowahanboardservice.domain.hackernews.helper.HackerNewsHelper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -96,7 +99,7 @@ public class PostingService {
                 .collect(Collectors.toList());
 
         if (articles.size() > 4) {
-            throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
+            //throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
         }
     }
 
@@ -147,9 +150,22 @@ public class PostingService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<ArticleView> searchArticles(String boardId) {
-        return articleDao.findAllByBoardId(boardId).stream()
-                .map(ArticleView::new)
+    public List<ArticleView> searchArticles(String boardId, Pageable pageable) {
+        Page<Article> pagedArticles = articleDao.findAllByBoardId(boardId, pageable);
+        return pagedArticles.stream()
+                .map(article -> new ArticleView(
+                        article.getId(),
+                        article.getBoardId(),
+                        article.getComments().stream().map(CommentView::new).collect(Collectors.toList()),
+                        article.getContents(),
+                        article.getCreateDateTime(),
+                        article.isHidden(),
+                        pagedArticles.isFirst(),
+                        pagedArticles.isLast(),
+                        article.getModifyDateTime(),
+                        pagedArticles.getPageable().getPageNumber(),
+                        article.getTitle(),
+                        article.getUserId()))
                 .collect(Collectors.toList());
     }
 

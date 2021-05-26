@@ -6,6 +6,7 @@ import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,10 +40,10 @@ public class PostingController {
         return ResponseEntity.ok(postingService.searchLately10HackerNews());
     }
 
-    @ApiOperation("게시글 목록 조회")
+    @ApiOperation("게시글 목록 페이징 조회")
     @GetMapping("/article/list")
-    public ResponseEntity<List<ArticleView>> searchArticles(@RequestParam String boardId) {
-        return ResponseEntity.ok(postingService.searchArticles(boardId));
+    public ResponseEntity<List<ArticleView>> searchArticles(@RequestParam String boardId, Pageable pageable) {
+        return ResponseEntity.ok(postingService.searchArticles(boardId, pageable));
     }
 
     @ApiOperation("게시글 등록 및 수정")
