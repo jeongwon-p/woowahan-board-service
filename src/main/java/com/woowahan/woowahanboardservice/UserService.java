@@ -2,15 +2,12 @@ package com.woowahan.woowahanboardservice;
 
 import com.woowahan.woowahanboardservice.domain.user.dao.UserRepository;
 import com.woowahan.woowahanboardservice.domain.user.dto.request.LogInRequestBody;
-import com.woowahan.woowahanboardservice.domain.user.dto.request.UserHideRequestBody;
-import com.woowahan.woowahanboardservice.domain.user.dto.request.UserJoinRequestBody;
 import com.woowahan.woowahanboardservice.domain.user.dto.view.LogInResponse;
 import com.woowahan.woowahanboardservice.domain.user.entity.User;
 import com.woowahan.woowahanboardservice.domain.user.util.JwtTokenProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 @Service

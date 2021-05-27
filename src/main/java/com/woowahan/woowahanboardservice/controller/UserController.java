@@ -2,8 +2,6 @@ package com.woowahan.woowahanboardservice.controller;
 
 import com.woowahan.woowahanboardservice.UserService;
 import com.woowahan.woowahanboardservice.domain.user.dto.request.LogInRequestBody;
-import com.woowahan.woowahanboardservice.domain.user.dto.request.UserHideRequestBody;
-import com.woowahan.woowahanboardservice.domain.user.dto.request.UserJoinRequestBody;
 import com.woowahan.woowahanboardservice.domain.user.dto.view.LogInResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
