@@ -19,18 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation("사용자 숨기기 및 숨기기 취소")
-    @PostMapping(value = "/hide")
-    public void hideOrCancelArticle(@RequestBody UserHideRequestBody request) {
-        userService.hideOrCancelArticle(request);
-    }
-
-    @ApiOperation("사용자 등록")
-    @PostMapping(value = "/join")
-    public void join(@RequestBody UserJoinRequestBody request) {
-        userService.join(request);
-    }
-
     @ApiOperation("로그인")
     @PostMapping(value = "/login")
     public ResponseEntity<LogInResponse> logIn(@RequestBody LogInRequestBody request) {
@@ -46,8 +34,4 @@ public class UserController {
     // TODO: logout
 
     // TODO : Oauth2.0 (여유)
-
-    // TODO : 비밀번호 초기화 (여유)
-
-
 }

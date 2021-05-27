@@ -30,27 +30,6 @@ public class UserService {
         this.userDao = userDao;
     }
 
-
-    @Transactional
-    public void hideOrCancelArticle(UserHideRequestBody request) {
-        User user = userDao.findById(request.getUserId())
-                .orElseThrow(EntityNotFoundException::new)
-                .hideOrCancel();
-        userDao.save(user);
-    }
-
-    @Transactional
-    public void join(UserJoinRequestBody request) {
-        userDao.save(new User(
-                request.getEmailId(),
-                request.isHidden(),
-                request.getName(),
-                encoder.encode(request.getPassword()),
-                0,
-                0)
-        );
-    }
-
     @Transactional
     public LogInResponse logIn(LogInRequestBody request) {
         User user = userDao.findById(request.getEmailId())
