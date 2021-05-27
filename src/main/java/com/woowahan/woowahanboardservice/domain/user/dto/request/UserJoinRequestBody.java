@@ -1,7 +1,5 @@
 package com.woowahan.woowahanboardservice.domain.user.dto.request;
 
-import com.woowahan.woowahanboardservice.domain.user.entity.User;
-
 public class UserJoinRequestBody {
 
     private String emailId;
@@ -12,12 +10,12 @@ public class UserJoinRequestBody {
 
     private String password;
 
-    public User toEntity() {
-        return new User(emailId, hidden, name, password, 0, 0);
-    }
-
     public String getEmailId() {
         return emailId;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public String getName() {

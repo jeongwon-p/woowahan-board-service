@@ -1,6 +1,5 @@
 package com.woowahan.woowahanboardservice;
 
-import com.woowahan.woowahanboardservice.domain.board.entity.Board;
 import com.woowahan.woowahanboardservice.domain.user.dao.UserRepository;
 import com.woowahan.woowahanboardservice.domain.user.dto.request.LogInRequestBody;
 import com.woowahan.woowahanboardservice.domain.user.dto.request.UserHideRequestBody;
@@ -8,6 +7,7 @@ import com.woowahan.woowahanboardservice.domain.user.dto.request.UserJoinRequest
 import com.woowahan.woowahanboardservice.domain.user.dto.view.LogInResponse;
 import com.woowahan.woowahanboardservice.domain.user.entity.User;
 import com.woowahan.woowahanboardservice.domain.user.util.JwtTokenProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,13 +16,20 @@ import javax.transaction.Transactional;
 @Service
 public class UserService {
 
-    private final UserRepository userDao;
+    private final BCryptPasswordEncoder encoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userDao;
 
-    public UserService(UserRepository userDao, JwtTokenProvider jwtTokenProvider) {
-        this.userDao = userDao;
+    public UserService(
+            BCryptPasswordEncoder encoder,
+            JwtTokenProvider jwtTokenProvider,
+            UserRepository userDao
+    ) {
+        this.encoder = encoder;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userDao = userDao;
     }
+
 
     @Transactional
     public void hideOrCancelArticle(UserHideRequestBody request) {
@@ -34,13 +41,22 @@ public class UserService {
 
     @Transactional
     public void join(UserJoinRequestBody request) {
-        userDao.save(request.toEntity());
+        userDao.save(new User(
+                request.getEmailId(),
+                request.isHidden(),
+                request.getName(),
+                encoder.encode(request.getPassword()),
+                0,
+                0)
+        );
     }
 
     @Transactional
     public LogInResponse logIn(LogInRequestBody request) {
         User user = userDao.findById(request.getEmailId())
-                .orElseThrow(IllegalAccessError::new);
+                .filter(info -> encoder.matches(request.getPassword(), info.getPassword())).stream()
+                .findAny()
+                .orElseThrow(() -> new IllegalAccessError("Email or password is wrong"));
 
         return new LogInResponse(
                 user.getName(),

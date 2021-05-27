@@ -25,7 +25,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "rank")
+    @Column(name = "ranking")
     private int rank;
 
     @Column(name = "score")
@@ -76,6 +76,10 @@ public class User {
 
     public String getEmailId() {
         return emailId;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public String getName() {
