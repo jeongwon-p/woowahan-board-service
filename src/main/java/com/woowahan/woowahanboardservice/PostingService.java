@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class PostingService {
@@ -85,10 +84,10 @@ public class PostingService {
 
     @Transactional(readOnly = true)
     public ArticleReportView reportArticle(ArticleReportRequest request) {
-        Map<LocalDate, Long> articles = articleDao.findAllBySearchCondition(request).stream()
+        Map<LocalDate, Long> articles = articleDao.findAllByCreateDateTimeBetween(request.getBeginDate().atStartOfDay(), request.getEndDate().atStartOfDay().plusDays(1)).stream()
                 .sorted(Comparator.comparing(Article::getCreateDateTime))
                 .collect(Collectors.groupingBy(article -> article.getCreateDateTime().toLocalDate(), Collectors.counting()));
-        Map<LocalDate, Long> comments = commentDao.findAllBySearchCondition(request).stream()
+        Map<LocalDate, Long> comments = commentDao.findAllByCreateDateTimeBetween(request.getBeginDate().atStartOfDay(), request.getEndDate().atStartOfDay().plusDays(1)).stream()
                 .sorted(Comparator.comparing(Comment::getCreateDateTime))
                 .collect(Collectors.groupingBy(comment -> comment.getCreateDateTime().toLocalDate(), Collectors.counting()));
 
