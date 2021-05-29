@@ -2,6 +2,7 @@ package com.woowahan.woowahanboardservice.controller;
 
 import com.woowahan.woowahanboardservice.PostingService;
 import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
+import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleReportView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
@@ -82,5 +83,9 @@ public class PostingController {
         postingService.hideOrCancelComment(request);
     }
 
-    // TODO : 일별 게시글, 댓글 통계(여유)
+    @ApiOperation("일별 게시글 및 댓글 통계")
+    @GetMapping("/article/report")
+    public ResponseEntity<ArticleReportView> reportArticle(@ModelAttribute ArticleReportRequest request) {
+        return ResponseEntity.ok(postingService.reportArticle(request));
+    }
 }

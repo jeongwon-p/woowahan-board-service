@@ -4,6 +4,7 @@ import com.woowahan.woowahanboardservice.domain.board.dao.ArticleRepository;
 import com.woowahan.woowahanboardservice.domain.board.dao.BoardRepository;
 import com.woowahan.woowahanboardservice.domain.board.dao.CommentRepository;
 import com.woowahan.woowahanboardservice.domain.board.dto.request.*;
+import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleReportView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.ArticleView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.BoardView;
 import com.woowahan.woowahanboardservice.domain.board.dto.view.CommentView;
@@ -20,11 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostingService {
@@ -78,6 +83,18 @@ public class PostingService {
         commentDao.save(comment);
     }
 
+    @Transactional(readOnly = true)
+    public ArticleReportView reportArticle(ArticleReportRequest request) {
+        Map<LocalDate, Long> articles = articleDao.findAllBySearchCondition(request).stream()
+                .sorted(Comparator.comparing(Article::getCreateDateTime))
+                .collect(Collectors.groupingBy(article -> article.getCreateDateTime().toLocalDate(), Collectors.counting()));
+        Map<LocalDate, Long> comments = commentDao.findAllBySearchCondition(request).stream()
+                .sorted(Comparator.comparing(Comment::getCreateDateTime))
+                .collect(Collectors.groupingBy(comment -> comment.getCreateDateTime().toLocalDate(), Collectors.counting()));
+
+        return new ArticleReportView(articles, comments);
+    }
+
     @Transactional
     public void saveArticle(ArticleEditRequestBody request) {
         // Todo : 권한 체크
@@ -99,7 +116,7 @@ public class PostingService {
                 .collect(Collectors.toList());
 
         if (articles.size() > 4) {
-            //throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
+            throw new ArticleIllegalException("You cannot register more than 5 posts including hidden posts.");
         }
     }
 
