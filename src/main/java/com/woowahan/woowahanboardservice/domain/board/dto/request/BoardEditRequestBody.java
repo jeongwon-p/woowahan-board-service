@@ -17,6 +17,8 @@ public class BoardEditRequestBody {
 
     private String name;
 
+    private String userId;
+
     public Board toBoard() {
         return new Board(
                 StringUtils.hasText(boardId)
@@ -58,5 +60,13 @@ public class BoardEditRequestBody {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

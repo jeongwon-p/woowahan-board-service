@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*") // TODO: Gateway 적용 후 CrossOrigin 어노테이션 지우기 (보안 위험)
 @RestController
 @RequestMapping("/post/")
 public class PostingController {
@@ -47,7 +48,7 @@ public class PostingController {
         return ResponseEntity.ok(postingService.searchBoards());
     }
 
-    @ApiOperation("해커뉴스 최신 10개 불러오기")
+    @ApiOperation("해커 뉴스 최신 10개 불러 오기")
     @GetMapping("/hackernews/lately")
     public ResponseEntity<List<HackerNewsStoryView>> searchLately10HackerNews() {
         return ResponseEntity.ok(postingService.searchLately10HackerNews());

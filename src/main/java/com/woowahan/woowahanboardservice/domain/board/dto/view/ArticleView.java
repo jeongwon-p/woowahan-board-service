@@ -1,6 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.dto.view;
 
 import com.woowahan.woowahanboardservice.domain.board.entity.Article;
+import com.woowahan.woowahanboardservice.domain.user.dto.view.UserView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,29 +9,31 @@ import java.util.stream.Collectors;
 
 public class ArticleView {
 
-    private String articleId;
+    private final String articleId;
 
-    private String boardId;
+    private final String boardId;
 
-    private List<CommentView> commentList;
+    private final List<CommentView> commentList;
 
-    private String content;
+    private final String content;
 
-    private LocalDateTime createDateTime;
+    private final LocalDateTime createDateTime;
 
-    private boolean hidden;
+    private final boolean hidden;
 
     private boolean isFirstPage;
 
     private boolean isLastPage;
 
-    private LocalDateTime modifyDateTime;
+    private final LocalDateTime modifyDateTime;
 
     private int currentPage;
 
-    private String title;
+    private final String title;
 
-    private String userId;
+    private final String userId;
+
+    private final UserView userView;
 
     public ArticleView(Article entity) {
         this.articleId = entity.getId();
@@ -42,6 +45,7 @@ public class ArticleView {
         this.modifyDateTime = entity.getModifyDateTime();
         this.title = entity.getTitle();
         this.userId = entity.getUserId();
+        this.userView = new UserView(entity.getUser());
     }
 
     public ArticleView(
@@ -56,7 +60,8 @@ public class ArticleView {
             LocalDateTime modifyDateTime,
             int currentPage,
             String title,
-            String userId
+            String userId,
+            UserView userView
     ) {
         this.articleId = articleId;
         this.boardId = boardId;
@@ -70,6 +75,7 @@ public class ArticleView {
         this.currentPage = currentPage;
         this.title = title;
         this.userId = userId;
+        this.userView = userView;
     }
 
     public String getArticleId() {
@@ -118,5 +124,9 @@ public class ArticleView {
 
     public String getUserId() {
         return userId;
+    }
+
+    public UserView getUserView() {
+        return userView;
     }
 }

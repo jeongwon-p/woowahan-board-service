@@ -1,5 +1,6 @@
 package com.woowahan.woowahanboardservice;
 
+import com.woowahan.woowahanboardservice.common.AuthorityException;
 import com.woowahan.woowahanboardservice.domain.board.dao.ArticleRepository;
 import com.woowahan.woowahanboardservice.domain.board.dao.BoardRepository;
 import com.woowahan.woowahanboardservice.domain.board.dao.CommentRepository;
@@ -14,6 +15,10 @@ import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
 import com.woowahan.woowahanboardservice.domain.board.exception.ArticleIllegalException;
 import com.woowahan.woowahanboardservice.domain.hackernews.dto.view.HackerNewsStoryView;
 import com.woowahan.woowahanboardservice.domain.hackernews.helper.HackerNewsHelper;
+import com.woowahan.woowahanboardservice.domain.user.UserRepository;
+import com.woowahan.woowahanboardservice.domain.user.dto.view.UserView;
+import com.woowahan.woowahanboardservice.domain.user.entity.User;
+import com.woowahan.woowahanboardservice.domain.user.type.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -37,26 +43,35 @@ public class PostingService {
     private final ArticleRepository articleDao;
     private final BoardRepository boardDao;
     private final CommentRepository commentDao;
+    private final UserRepository userDao;
     private final MailService mailService;
 
     public PostingService(
             ArticleRepository articleDao,
             BoardRepository boardDao,
             CommentRepository commentDao,
+            UserRepository userDao,
             MailService mailService
     ) {
         this.articleDao = articleDao;
         this.boardDao = boardDao;
         this.commentDao = commentDao;
+        this.userDao = userDao;
         this.mailService = mailService;
     }
 
     @Transactional
     public void hideOrCancelArticle(ArticleHideRequestBody request) {
-        // Todo : 권한 체크
         Article article = articleDao.findById(request.getArticleId())
                 .orElseThrow(EntityNotFoundException::new)
                 .hideOrCancel();
+        User user = userDao.findById(request.getUserId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        if (!request.getUserId().equals(article.getUserId()) && user.getRole() != Role.ADMIN) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
+
         if (!article.isHidden()) {
             this.checkExcess5Limit(article);
         }
@@ -66,19 +81,31 @@ public class PostingService {
 
     @Transactional
     public void hideOrCancelBoard(BoardHideRequestBody request) {
-        // Todo : 권한 체크
         Board board = boardDao.findById(request.getBoardId())
                 .orElseThrow(EntityNotFoundException::new)
                 .hideOrCancel();
+        User user = userDao.findById(request.getUserId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
+
         boardDao.save(board);
     }
 
     @Transactional
     public void hideOrCancelComment(CommentHideRequestBody request) {
-        // Todo : 권한 체크
         Comment comment = commentDao.findById(request.getCommentId())
                 .orElseThrow(EntityNotFoundException::new)
                 .hideOrCancel();
+        User user = userDao.findById(request.getUserId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        if (!request.getUserId().equals(comment.getUserId()) && user.getRole() != Role.ADMIN) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
+
         commentDao.save(comment);
     }
 
@@ -96,8 +123,15 @@ public class PostingService {
 
     @Transactional
     public void saveArticle(ArticleEditRequestBody request) {
-        // Todo : 권한 체크
-        Article article = request.toArticle();
+        Article article = Optional.ofNullable(request.getArticleId())
+                .map(articleId -> articleDao.findById(articleId)
+                        .orElseThrow(EntityNotFoundException::new))
+                .orElse(request.toArticle());
+
+        if (!article.getUserId().equals(request.getUserId())) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
+
         this.checkExcess5Limit(article);
         this.checkProhibitionWords(article.getContents());
         this.checkIncludedLink(article.getContents());
@@ -138,16 +172,26 @@ public class PostingService {
 
     @Transactional
     public void saveBoard(BoardEditRequestBody request) {
-        // Todo : 권한 체크
+        User user = userDao.findById(request.getUserId())
+                .orElseThrow(EntityNotFoundException::new);
+        if (user.getRole() != Role.ADMIN) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
         boardDao.save(request.toBoard());
     }
 
     @Transactional
     public void saveComment(CommentEditRequestBody request) {
-        // Todo : 권한 체크
         Article article = articleDao.findById(request.getArticleId())
                 .orElseThrow(EntityNotFoundException::new);
-        Comment comment = request.toComment();
+        Comment comment = Optional.ofNullable(request.getCommentId())
+                .map(commentId -> commentDao.findById(commentId)
+                        .orElseThrow(EntityNotFoundException::new))
+                .orElse(request.toComment());
+
+        if (!comment.getUserId().equals(request.getUserId())) {
+            throw new AuthorityException("Authority Error: You do not have permission");
+        }
 
         // send mail when a comment is first posted
         if (!StringUtils.hasText(request.getCommentId())) {
@@ -181,7 +225,8 @@ public class PostingService {
                         article.getModifyDateTime(),
                         pagedArticles.getPageable().getPageNumber(),
                         article.getTitle(),
-                        article.getUserId()))
+                        article.getUserId(),
+                        new UserView(article.getUser())))
                 .collect(Collectors.toList());
     }
 
