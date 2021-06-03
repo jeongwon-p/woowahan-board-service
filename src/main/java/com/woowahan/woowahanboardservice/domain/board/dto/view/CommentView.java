@@ -6,19 +6,19 @@ import java.time.LocalDateTime;
 
 public class CommentView {
 
-    private String articleId;
+    private final String articleId;
 
-    private String commentId;
+    private final String commentId;
 
-    private String content;
+    private final String content;
 
-    private LocalDateTime createDateTime;
+    private final LocalDateTime createDateTime;
 
-    private boolean hidden;
+    private final boolean hidden;
 
-    private LocalDateTime modifyDateTime;
+    private final LocalDateTime modifyDateTime;
 
-    private String userId;
+    private final String userId;
 
     public CommentView(Comment entity) {
         this.articleId = entity.getArticleId();

@@ -4,13 +4,13 @@ import com.woowahan.woowahanboardservice.domain.board.entity.Board;
 
 public class BoardView {
 
-    private String boardId;
+    private final String boardId;
 
-    private String description;
+    private final String description;
 
-    private boolean hidden;
+    private final boolean hidden;
 
-    private String name;
+    private final String name;
 
     public BoardView(Board entity) {
         this.boardId = entity.getId();

@@ -4,15 +4,15 @@ import com.woowahan.woowahanboardservice.domain.hackernews.model.HackerNewsStory
 
 public class HackerNewsStoryView {
 
-    private String by;
+    private final String by;
 
-    private int score;
+    private final int score;
 
-    private int time;
+    private final int time;
 
-    private String title;
+    private final String title;
 
-    private String url;
+    private final String url;
 
     public HackerNewsStoryView(HackerNewsStory entity) {
         this.by = entity.getBy();

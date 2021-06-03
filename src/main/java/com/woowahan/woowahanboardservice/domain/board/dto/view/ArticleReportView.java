@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class ArticleReportView {
 
-    private Map<LocalDate, Long> article;
+    private final Map<LocalDate, Long> article;
 
-    private Map<LocalDate, Long> comment;
+    private final Map<LocalDate, Long> comment;
 
     public ArticleReportView(Map<LocalDate, Long> articles, Map<LocalDate, Long> comments) {
         this.article = articles;
