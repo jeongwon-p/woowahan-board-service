@@ -16,7 +16,7 @@ public class User {
 
     @Id
     @Column(name = "email_id")
-    private String emailId;
+    private String id;
 
     @Column(name = "hide_yn", columnDefinition = "varchar(1) default 'N'")
     @Convert(converter = BooleanToYnConverter.class)
@@ -46,16 +46,16 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return emailId.equals(user.emailId);
+        return id.equals(user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(emailId);
+        return Objects.hash(id);
     }
 
-    public String getEmailId() {
-        return emailId;
+    public String getId() {
+        return id;
     }
 
     public boolean isHidden() {

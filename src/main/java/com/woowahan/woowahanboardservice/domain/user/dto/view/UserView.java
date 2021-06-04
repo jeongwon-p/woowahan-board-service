@@ -14,7 +14,7 @@ public class UserView {
     private final Role role;
 
     public UserView(User entity) {
-        this.userId = entity.getEmailId();
+        this.userId = entity.getId();
         this.name = entity.getName();
         this.ranking = entity.getRank();
         this.role = entity.getRole();

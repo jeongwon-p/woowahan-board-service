@@ -4,7 +4,7 @@
   번거로움 없이 진행 가능합니다.
 
 본 프로젝트는 게시판 서비스를 제공합니다.
-<br/><br/>
+<br/>
 
 <프로젝트 실행 방법><br/>
 해당 프로젝트는 MySQL 기반 프로젝트입니다. 로컬 PC에 MySQL 환경설정 셋팅이 필요합니다.
@@ -19,3 +19,17 @@
 5. java -jar build/libs/woowahan-board-service-0.0.1-SNAPSHOT.jar
 
 * 본 서비스는 Swagger UI 를 제공합니다. http://localhost:8002/swagger-ui/#/
+
+#Code Convention
+* (Entity)
+1. Entity 의 @Id 필드명은 'id' 로 통일합니다.
+2. 각 Entity 가 Immutable 상태를 유지할 수 있도록 특별한 경우를 제외하고 Setter 제공을 금지합니다.
+3. Entity equals() 재정의 시 꼭 hashcode() 도 재정의 해주시길 바랍니다.
+* (DTO)
+1. RequestParam 객체는 /dto/request 경로에 *Request 파일명으로 생성바랍니다.
+2. RequestBody 객체는 /dto/request 경로에 *RequestBody 파일명으로 생성바랍니다.
+3. Client 에게 전달되는 객체는 *View 파일명으로 재정의 바랍니다. 엔티티 상태로 반환을 금지합니다.
+
+#Todo
+1. Gateway 서비스 구현하여 @CrossOrigin 제거 (보안 위험)
+2. Request 로 userId 제공 받는 대신 authorization token 의 userId 사용하도록 수정
