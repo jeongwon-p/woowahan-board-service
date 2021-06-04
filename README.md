@@ -28,7 +28,7 @@
 * (DTO)
 1. RequestParam 객체는 /dto/request 경로에 *Request 파일명으로 생성바랍니다.
 2. RequestBody 객체는 /dto/request 경로에 *RequestBody 파일명으로 생성바랍니다.
-3. Client 에게 전달되는 객체는 *View 파일명으로 재정의 바랍니다. 엔티티 상태로 반환을 금지합니다.
+3. Client 에게 전달되는 객체는 *View 파일명으로 재정의 바랍니다. 특별한 경우를 제외하고 엔티티 상태로 반환을 금지합니다.
 
 #Todo
 1. Gateway 서비스 구현하여 @CrossOrigin 제거 (보안 위험)
