@@ -121,6 +121,10 @@ public class Comment {
         return id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Article getArticle() {
         return article;
     }

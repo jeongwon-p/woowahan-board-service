@@ -1,6 +1,7 @@
 package com.woowahan.woowahanboardservice.domain.board.dto.view;
 
 import com.woowahan.woowahanboardservice.domain.board.entity.Comment;
+import com.woowahan.woowahanboardservice.domain.user.dto.view.UserView;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,8 @@ public class CommentView {
 
     private final String userId;
 
+    private final UserView userView;
+
     public CommentView(Comment entity) {
         this.articleId = entity.getArticleId();
         this.commentId = entity.getId();
@@ -28,6 +31,7 @@ public class CommentView {
         this.hidden = entity.isHidden();
         this.modifyDateTime = entity.getModifyDateTime();
         this.userId = entity.getUserId();
+        this.userView = new UserView(entity.getUser());
     }
 
     public String getArticleId() {
@@ -56,5 +60,9 @@ public class CommentView {
 
     public String getUserId() {
         return userId;
+    }
+
+    public UserView getUserView() {
+        return userView;
     }
 }
