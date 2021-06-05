@@ -117,6 +117,22 @@ public class Article {
         return Objects.hash(id);
     }
 
+    public Article updateArticle(Article article) {
+        return new Article(
+                this.id,
+                this.board,
+                this.comments,
+                this.user,
+                this.boardId,
+                article.contents,
+                this.createDateTime,
+                this.hidden,
+                LocalDateTime.now(),
+                article.title,
+                this.userId
+        );
+    }
+
     public Article hideOrCancel() {
         return new Article(
                 this.id,

@@ -125,7 +125,7 @@ public class PostingService {
     public void saveArticle(ArticleEditRequestBody request) {
         Article article = Optional.ofNullable(request.getArticleId())
                 .map(articleId -> articleDao.findById(articleId)
-                        .orElseThrow(EntityNotFoundException::new))
+                        .orElseThrow(EntityNotFoundException::new).updateArticle(request.toArticle()))
                 .orElse(request.toArticle());
 
         if (!article.getUserId().equals(request.getUserId())) {
@@ -186,7 +186,7 @@ public class PostingService {
                 .orElseThrow(EntityNotFoundException::new);
         Comment comment = Optional.ofNullable(request.getCommentId())
                 .map(commentId -> commentDao.findById(commentId)
-                        .orElseThrow(EntityNotFoundException::new))
+                        .orElseThrow(EntityNotFoundException::new).updateComment(request.toComment()))
                 .orElse(request.toComment());
 
         if (!comment.getUserId().equals(request.getUserId())) {
@@ -213,10 +213,13 @@ public class PostingService {
     public List<ArticleView> searchArticles(String boardId, Pageable pageable) {
         Page<Article> pagedArticles = articleDao.findAllByBoardId(boardId, pageable);
         return pagedArticles.stream()
+                .sorted(Comparator.comparing(Article::getCreateDateTime))
                 .map(article -> new ArticleView(
                         article.getId(),
                         article.getBoardId(),
-                        article.getComments().stream().map(CommentView::new).collect(Collectors.toList()),
+                        article.getComments().stream()
+                                .sorted(Comparator.comparing(Comment::getCreateDateTime))
+                                .map(CommentView::new).collect(Collectors.toList()),
                         article.getContents(),
                         article.getCreateDateTime(),
                         article.isHidden(),

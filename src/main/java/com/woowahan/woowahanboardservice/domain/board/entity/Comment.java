@@ -117,6 +117,20 @@ public class Comment {
         );
     }
 
+    public Comment updateComment(Comment newComment) {
+        return new Comment(
+                this.id,
+                this.article,
+                this.user,
+                this.articleId,
+                newComment.content,
+                this.createDateTime,
+                this.hidden,
+                LocalDateTime.now(),
+                this.userId
+        );
+    }
+
     public String getId() {
         return id;
     }
