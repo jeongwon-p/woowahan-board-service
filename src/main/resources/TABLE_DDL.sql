@@ -51,6 +51,6 @@ CREATE TABLE `USERTOKEN` (
 )
 ;
 
-insert into user (email_id, name, password, ranking, score, hide_yn) values ('admin', 'admin', 'admin', '0', '0', 'N', 'ADMIN');
+insert into user (email_id, name, password, ranking, score, hide_yn) values ('admin', 'admin', '$2a$10$I1z3kYmQqg8iOLcM/JAqKOlZZLWWGXPy6BUiT5dBNdbI.zCGw1sFy', '0', '0', 'N', 'ADMIN');
 INSERT INTO user (email_id, name, password, ranking, score, hide_yn, role) VALUES ('jongwon5185@naver.com', '박정원', '$2a$10$I1z3kYmQqg8iOLcM/JAqKOlZZLWWGXPy6BUiT5dBNdbI.zCGw1sFy', '0', '0', 'N', 'USER');
 INSERT INTO board (board_id, board_desc, hide_yn, board_name) VALUES ('1', '공지사항 올라오는 게시판입니다.', 'N', '공지사항');

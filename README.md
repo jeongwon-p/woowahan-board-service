@@ -10,8 +10,9 @@
 해당 프로젝트는 MySQL 기반 프로젝트입니다. 로컬 PC에 MySQL 환경설정 셋팅이 필요합니다.
 
 1. 본 서비스를 실행 시키기 전 /resources/TABLE_DDL.sql 스크립트를 실행하여 필요한 table 들을 생성해야 합니다.<br/>
-*  Front 미구현으로 인해 아래 DML 문의 {개인이메일}과 {이름}을 채워 실행합니다. password는 1234 가 암호화 되어 있습니다. 로그인 시 사용하시면 됩니다.<br/>
+*  빠른 테스트를 위해 아래 DML 문의 {개인이메일}과 {이름}을 채워 실행합니다. password는 1234 가 암호화 되어 있습니다. 로그인 시 사용하시면 됩니다.<br/>
    INSERT INTO user (email_id, name, password, ranking, score, hide_yn, role) VALUES ({개인이메일}, {이름}, '$2a$10$I1z3kYmQqg8iOLcM/JAqKOlZZLWWGXPy6BUiT5dBNdbI.zCGw1sFy', '0', '0', 'N', 'USER');
+*  ADMIN 계정은 ID: admin, PASSWORD: 1234 입니다.
 2. /resources/application.yml 파일의 datasource.url, datasource.username, datasource.password
    값을 로컬 환경의 MySQL 설정 값으로 수정하여야 합니다.
 3. 댓글 등록 시 메일 발송을 위하여 개인 SMTP 인증이 필요합니다. 
