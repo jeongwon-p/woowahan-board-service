@@ -38,7 +38,10 @@ public class ArticleView {
     public ArticleView(Article entity) {
         this.articleId = entity.getId();
         this.boardId = entity.getBoardId();
-        this.commentList = entity.getComments().stream().map(CommentView::new).collect(Collectors.toList());
+        this.commentList = entity.getComments().stream()
+                .filter(comment -> !comment.isHidden())
+                .map(CommentView::new)
+                .collect(Collectors.toList());
         this.content = entity.getContents();
         this.createDateTime = entity.getCreateDateTime();
         this.hidden = entity.isHidden();

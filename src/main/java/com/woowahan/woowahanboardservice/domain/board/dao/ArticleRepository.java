@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, String> {
-    Page<Article> findAllByBoardId(String boardId, Pageable pageable);
+    Page<Article> findAllByBoardIdAndHiddenFalse(String boardId, Pageable pageable);
 
     List<Article> findAllByUserIdAndCreateDateTimeBetween(String userId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 

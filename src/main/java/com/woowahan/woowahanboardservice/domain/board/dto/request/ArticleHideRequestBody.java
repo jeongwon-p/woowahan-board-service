@@ -10,7 +10,15 @@ public class ArticleHideRequestBody {
         return articleId;
     }
 
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
+
     public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

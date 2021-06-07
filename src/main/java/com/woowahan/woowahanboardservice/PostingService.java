@@ -211,13 +211,14 @@ public class PostingService {
     }
 
     public List<ArticleView> searchArticles(String boardId, Pageable pageable) {
-        Page<Article> pagedArticles = articleDao.findAllByBoardId(boardId, pageable);
+        Page<Article> pagedArticles = articleDao.findAllByBoardIdAndHiddenFalse(boardId, pageable);
         return pagedArticles.stream()
                 .sorted(Comparator.comparing(Article::getCreateDateTime))
                 .map(article -> new ArticleView(
                         article.getId(),
                         article.getBoardId(),
                         article.getComments().stream()
+                                .filter(comment -> !comment.isHidden())
                                 .sorted(Comparator.comparing(Comment::getCreateDateTime))
                                 .map(CommentView::new).collect(Collectors.toList()),
                         article.getContents(),
@@ -234,7 +235,7 @@ public class PostingService {
     }
 
     public List<BoardView> searchBoards() {
-        return boardDao.findAll().stream()
+        return boardDao.findAllByHiddenFalse().stream()
                 .map(BoardView::new)
                 .collect(Collectors.toList());
     }
